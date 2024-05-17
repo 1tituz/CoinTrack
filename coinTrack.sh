@@ -115,6 +115,12 @@ if [[ $sortTABLE == "a" ]]; then
     elif [[ $sortTABLE == "m" ]]; then
     # Sort by Portfolio Value
     coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.Marketcap | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    elif [[ $sortTABLE == "1" ]]; then
+    # Sort by Portfolio Value
+    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change1h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    elif [[ $sortTABLE == "2" ]]; then
+    # Sort by Portfolio Value
+    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
 fi
 
 
@@ -126,6 +132,8 @@ changeHour=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEHOUR) # 1h
 changePctHour=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCTHOUR) # 1h pricechange in $currency
 marketCapDsp=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.MKTCAP) # Marketcap
 totalVolume=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.TOTALVOLUME24HTO) # Total Volume last 24h
+
+
 
 if [[ $changePct == -* ]]; then changePct=${red}$changePct${reset}; else changePct=${green}+$changePct${reset}; fi
 if [[ $changePctHour == -* ]]; then changePctHour=${red}$changePctHour${reset}; else changePctHour=${green}+$changePctHour${reset}; fi
@@ -140,6 +148,11 @@ jsonFile=$(echo "$jsonFile" | jq --arg newHolding $value --arg c "$coin" '.DATA.
 # Also add current Marketcap
 marketCap=$(echo "$newValues" | jq -r .RAW.$coin.$currency.MKTCAP)
 jsonFile=$(echo "$jsonFile" | jq --arg Mcap $marketCap --arg c "$coin" '.DATA.Coins.[$c] += {"Marketcap": $Mcap}');
+# Now add % Changes
+change24=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCT24HOUR) # 24h pricechange in %
+jsonFile=$(echo "$jsonFile" | jq --arg change $change24 --arg c "$coin" '.DATA.Coins.[$c] += {"change24h": $change}');
+change1=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCTHOUR) # 1h pricechange in %
+jsonFile=$(echo "$jsonFile" | jq --arg change $change1 --arg c "$coin" '.DATA.Coins.[$c] += {"change1h": $change}');
 # Write new json Data to db.json only once
 if [[ $i == $(($n-1)) ]]; then
 echo "$jsonFile" | jq > db.json
@@ -193,14 +206,21 @@ for (( i=0; i<$n; i++ ));  do
 # Get the Coinsymbols from db.json
 if [[ $sortTABLE == "a" ]]; then
     # Alphabetical Sort
-    coin=$(echo "$jsonFile" | jq ".DATA.Coins | keys.[$i]" | sed 's/\"//g') # Symbol
+    coin=$(echo "$jsonFile" | jq -r ".DATA.Coins | keys.[$i]") # Symbol
     elif [[ $sortTABLE == "p" ]]; then
-    # Sort bei Portfolio Value
+    # Sort by Portfolio Value
     coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.FIATholding | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
     elif [[ $sortTABLE == "m" ]]; then
-    # Sort bei Portfolio Value
+    # Sort by Portfolio Value
     coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.Marketcap | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    elif [[ $sortTABLE == "1" ]]; then
+    # Sort by Portfolio Value
+    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change1h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    elif [[ $sortTABLE == "2" ]]; then
+    # Sort by Portfolio Value
+    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
 fi
+
 
 rawPrice=$(echo "$newValues" | jq .RAW.$coin.$currency.PRICE | sed s/\"//g;) # Current RawPrice
 price=$(echo "$newValues" | jq .DISPLAY.$coin.$currency.PRICE | sed s/\"//g;) # Current Price
@@ -330,12 +350,14 @@ SORT () {
     echo -e "   ${white}a${reset} = Alphabetical"
     echo -e "   ${white}m${reset} = Marketcap"
     echo -e "   ${white}p${reset} = Portfolio Value"
+    echo -e "   ${white}1${reset} = 1h % change"
+    echo -e "   ${white}2${reset} = 24h % change"
     echo;
     echo -n "   : "
     read sortOrder
     if [[ -z $sortOrder ]]; then
         TABLE
-        elif [[ $sortOrder == *"a"* || $sortOrder == *"m"* || $sortOrder == *"p"* ]]; then
+        elif [[ $sortOrder == *"a"* || $sortOrder == *"m"* || $sortOrder == *"p"* || $sortOrder == *"1"* || $sortOrder == *"2"* ]]; then
         jsonFile=$(echo "$jsonFile" | jq --arg sort "$sortOrder" '.DATA += {"sortTable": $sort}')
         echo $jsonFile | jq > db.json
         TABLE
