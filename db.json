@@ -1,38 +1,45 @@
 {
   "DATA": {
     "apiKey": "",
-    "Currency": "USD",
+    "Currency": "EUR",
     "Portfolio": "1",
+    "sortTable": "2",
+    "Lable": "off",
     "Coins": {
       "BTC": {
         "Holding": "0.1",
-        "FIATholding": "6657.7",
-        "currentPrice": null,
-        "rawCurrentPrice": null
+        "FIATholding": "6126.15",
+        "Marketcap": "1206823623105.3713",
+        "change24h": "0.81",
+        "change1h": "0.37"
       },
       "ETH": {
-        "Holding": "0.6",
-        "FIATholding": "2025.15",
-        "currentPrice": null,
-        "rawCurrentPrice": null
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "340300455840.30206",
+        "change24h": "3.27",
+        "change1h": "1.43"
       },
       "BNB": {
-        "Holding": "0.9",
-        "FIATholding": "504.304",
-        "currentPrice": null,
-        "rawCurrentPrice": null
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "78869995042.92519",
+        "change24h": "0.76",
+        "change1h": "0.26"
       },
       "SOL": {
-        "Holding": "2158.77",
-        "FIATholding": "396027",
-        "currentPrice": null,
-        "rawCurrentPrice": null
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "89572310596.97891",
+        "change24h": "4.53",
+        "change1h": "0.65"
       },
       "DOGE": {
-        "Holding": "25547.55",
-        "FIATholding": "4785.57",
-        "currentPrice": null,
-        "rawCurrentPrice": null
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "20416354525.339245",
+        "change24h": "0.44",
+        "change1h": "0.88"
       }
     }
   }
