@@ -102,7 +102,7 @@ newValues=$(curl -g -s -X GET "https://min-api.cryptocompare.com/data/pricemulti
 
 echo;
 echo -e "***  Coin  ******  Price ********* 1h% ** 24h%  ***   24h Volume   ***     Marketcap    ***  Holdings & Value in $currency ***";
-echo -e "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––----------------–----------";
+echo -e "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––";
 for (( i=0; i<$n; i++ ));  do
 
 # Get the Coinsymbols from db.json
@@ -199,8 +199,8 @@ LOGO
 n=$(echo "$jsonFile" | jq '.DATA.Coins | length')
 
 echo;
-echo -e "*******  Coin  ******  Price ********* 1h% ** 24h% ** 3D% **  7D% **  1M%  ** 3M%  **  6M%";
-echo -e "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––";
+echo -e "*******  Coin  ******  Price ********* 1h% ** 24h% ** 3D% ** 7D% **  1M%  ** 3M%  **  6M%  **  9M%  **  1Y% ";
+echo -e "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––";
 for (( i=0; i<$n; i++ ));  do
 
 # Get the Coinsymbols from db.json
@@ -230,43 +230,57 @@ changeHour=$(echo "$newValues" | jq .DISPLAY.$coin.$currency.CHANGEHOUR | sed s/
 changePctHour=$(echo "$newValues" | jq .DISPLAY.$coin.$currency.CHANGEPCTHOUR | sed s/\"//g;) # 1h pricechange in $currency
 
 
-history=$(curl -g -s -X GET "https://min-api.cryptocompare.com/data/v2/histoday?fsym="$coin"&tsym=$currency&limit=182&api_key={$APIkey}");
+history=$(curl -g -s -X GET "https://min-api.cryptocompare.com/data/v2/histoday?fsym="$coin"&tsym=$currency&limit=365&api_key={$APIkey}");
 # History Price-Changes. To round numbers after . use "LC_ALL=C /usr/bin/printf" because of german locale Numberformat using , instad of . ( 6,666).
-SIXm=$(printf $history | jq '.Data.Data[0].close');
+
+ONEy=$(printf $history | jq '.Data.Data[0].close');
+ONEy=$(awk "BEGIN {a=$ONEy; e=$rawPrice; ep=(e-a)/a*100; printf ep}");
+ONEy=$(echo $ONEy | sed "s/","/\./");
+#SIXm=$(echo "scale=2; $SIXm/1" | bc)
+ONEy=$(LC_ALL=C /usr/bin/printf '%.*f\n' 2 $ONEy);
+
+NINEm=$(printf $history | jq '.Data.Data[91].close');
+NINEm=$(awk "BEGIN {a=$NINEm; e=$rawPrice; ep=(e-a)/a*100; printf ep}");
+NINEm=$(echo $NINEm | sed "s/","/\./");
+#SIXm=$(echo "scale=2; $SIXm/1" | bc)
+NINEm=$(LC_ALL=C /usr/bin/printf '%.*f\n' 2 $NINEm);
+
+SIXm=$(printf $history | jq '.Data.Data[182].close');
 SIXm=$(awk "BEGIN {a=$SIXm; e=$rawPrice; ep=(e-a)/a*100; printf ep}");
 SIXm=$(echo $SIXm | sed "s/","/\./");
 #SIXm=$(echo "scale=2; $SIXm/1" | bc)
 SIXm=$(LC_ALL=C /usr/bin/printf '%.*f\n' 2 $SIXm);
 
-THREm=$(printf $history | jq '.Data.Data[90].close');
+THREm=$(printf $history | jq '.Data.Data[272].close');
 THREm=$(awk "BEGIN {a=$THREm; e=$rawPrice; ep=(e-a)/a*100; printf ep}");
 SIXm=$(echo $SIXm | sed "s/","/\./");
 #THREm=$(echo "scale=2; $THREm/1" | bc)
 THREm=$(LC_ALL=C /usr/bin/printf '%.*f\n' 2 $THREm);
 
-ONEm=$(printf $history | jq '.Data.Data[152].close');
+ONEm=$(printf $history | jq '.Data.Data[320].close');
 ONEm=$(awk "BEGIN {a=$ONEm; e=$rawPrice; ep=(e-a)/a*100; printf ep}");
 ONEm=$(echo $ONEm | sed "s/","/\./");
 #ONEm=$(echo "scale=2; $ONEm/1" | bc)
 ONEm=$(LC_ALL=C /usr/bin/printf '%.*f\n' 2 $ONEm);
 
-SEVENd=$(printf $history | jq '.Data.Data[175].close');
+SEVENd=$(printf $history | jq '.Data.Data[358].close');
 SEVENd=$(awk "BEGIN {a=$SEVENd; e=$rawPrice; ep=(e-a)/a*100; printf ep}");
 SEVENd=$(echo $SEVENd | sed "s/","/\./");
 #SEVENd=$(echo "scale=2; $SEVENd/1" | bc)
 SEVENd=$(LC_ALL=C /usr/bin/printf '%.*f\n' 2 $SEVENd);
 
-THREd=$(printf $history | jq '.Data.Data[179].close');
+THREd=$(printf $history | jq '.Data.Data[362].close');
 THREd=$(awk "BEGIN {a=$THREd; e=$rawPrice; ep=(e-a)/a*100; printf ep}");
 THREd=$(echo $THREd | sed "s/","/\./");
 #THREd=$(echo "scale=2; $THREd/1" | bc)
 THREd=$(LC_ALL=C /usr/bin/printf '%.*f\n' 2 $THREd);
 
-
 if [[ $changePct == -* ]]; then changePct=${red}$changePct${reset}; else changePct=${green}+$changePct${reset}; fi
 if [[ $changePctHour == -* ]]; then changePctHour=${red}$changePctHour${reset}; else changePctHour=${green}+$changePctHour${reset}; fi
 if [[ $change == -* ]]; then change=${red}$change${reset}; else change=${green}$change${reset}; fi
 
+if [[ $ONEy == -* ]]; then ONEy=${red}$ONEy${reset}; else ONEy=${green}+$ONEy${reset}; fi
+if [[ $NINEm == -* ]]; then NINEm=${red}$NINEm${reset}; else NINEm=${green}+$NINEm${reset}; fi
 if [[ $SIXm == -* ]]; then SIXm=${red}$SIXm${reset}; else SIXm=${green}+$SIXm${reset}; fi
 if [[ $THREm == -* ]]; then THREm=${red}$THREm${reset}; else THREm=${green}+$THREm${reset}; fi
 if [[ $ONEm == -* ]]; then ONEm=${red}$ONEm${reset}; else ONEm=${green}+$ONEm${reset}; fi
@@ -278,7 +292,7 @@ if [[ $THREd == -* ]]; then THREd=${red}$THREd${reset}; else THREd=${green}+$THR
 
 
 
-echo -e "....... ${bold}${white}$coin${reset} ... $price ... $changePctHour $changePct $THREd $SEVENd  $ONEm  $THREm  $SIXm";
+echo -e "....... ${bold}${white}$coin${reset} ... $price ... $changePctHour $changePct $THREd $SEVENd  $ONEm  $THREm  $SIXm  $NINEm  $ONEy";
 
 done | column -t;
 
