@@ -8,40 +8,40 @@
     "Coins": {
       "BTC": {
         "Holding": 1,
-        "FIATholding": "91954",
-        "Marketcap": "1819203268510.8076",
-        "change24h": "1.08",
-        "change1h": "0.24"
+        "FIATholding": "91911.7",
+        "Marketcap": "1818365745787.9092",
+        "change24h": "1.03",
+        "change1h": "0.20"
       },
       "ETH": {
         "Holding": 10,
-        "FIATholding": "31342.7",
-        "Marketcap": "377441660608.49054",
-        "change24h": "-0.35",
-        "change1h": "0.11"
+        "FIATholding": "31248.4",
+        "Marketcap": "376305807686.1573",
+        "change24h": "-0.65",
+        "change1h": "-0.19"
       },
       "BNB": {
         "Holding": 20,
-        "FIATholding": "12545.1",
-        "Marketcap": "89111086091.66074",
-        "change24h": "-2.39",
-        "change1h": "0.13"
+        "FIATholding": "12516.4",
+        "Marketcap": "88906856963.68208",
+        "change24h": "-2.62",
+        "change1h": "-0.10"
       },
       "SOL": {
         "Holding": 30,
-        "FIATholding": "7203.98",
-        "Marketcap": "141335947609.7656",
-        "change24h": "1.01",
-        "change1h": "-0.81"
+        "FIATholding": "7220",
+        "Marketcap": "141650125087.50363",
+        "change24h": "1.23",
+        "change1h": "-0.59"
       },
       "DOGE": {
         "Holding": 40,
-        "FIATholding": "15.0575",
-        "Marketcap": "55275900032.768875",
-        "change24h": "2.78",
-        "change1h": "0.35"
+        "FIATholding": "15.1598",
+        "Marketcap": "55651640370.51572",
+        "change24h": "3.48",
+        "change1h": "1.03"
       }
     },
-    "Totalvalue": "143061"
+    "Totalvalue": "142911"
   }
 }

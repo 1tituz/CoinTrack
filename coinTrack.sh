@@ -182,6 +182,9 @@ done <<< "$valueList"
 
 # Read totalValue
 oldValue=$(echo $jsonFile | jq -r .DATA.Totalvalue)
+if [[ $oldValue == null ]]; then
+    oldValue=$totalValue
+fi
 
 # Write new totalValue
 jsonFile=$(echo "$jsonFile" | jq --arg tvalue "$totalValue" '.DATA += {"Totalvalue": $tvalue}')
@@ -196,9 +199,9 @@ differenz=$(awk "BEGIN { print ($totalValue-$oldValue)/$oldValue*100 }")
 
 echo -e "   Total Value: ${blue}$currency $totalValue ${reset}";
 if [[ $differenz == -* ]]; then
-echo -e "      % Change: ${red}${bold}$differenz% ${reset}";
+echo -e "      % Change: ${red}${bold}$differenz ${reset}";
     else
-echo -e "      % Change: ${green}${bold}$differenz% ${reset}";
+echo -e "      % Change: ${green}${bold}$differenz ${reset}";
 fi
 
 
