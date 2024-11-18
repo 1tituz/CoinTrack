@@ -180,11 +180,26 @@ while IFS= read -r line; do
 totalValue=$(awk "BEGIN {t=$totalValue; l=$line; tl=t+l; print tl}");
 done <<< "$valueList"
 
+# Read totalValue
+oldValue=$(echo $jsonFile | jq -r .DATA.Totalvalue)
+
+# Write new totalValue
+jsonFile=$(echo "$jsonFile" | jq --arg tvalue "$totalValue" '.DATA += {"Totalvalue": $tvalue}')
+echo $jsonFile | jq > db.json
+
 if [[ $portF == 0 ]]; then
     totalValue="****"
 fi
 
-echo -e "   Total Value: ${blue}${bold}$currency $totalValue ${reset}";
+differenz=$(awk "BEGIN { print ($totalValue-$oldValue)/$oldValue*100 }")
+
+
+echo -e "   Total Value: ${blue}$currency $totalValue ${reset}";
+if [[ $differenz == -* ]]; then
+echo -e "      % Change: ${red}${bold}$differenz% ${reset}";
+    else
+echo -e "      % Change: ${green}${bold}$differenz% ${reset}";
+fi
 
 
 echo;echo;echo;echo;
