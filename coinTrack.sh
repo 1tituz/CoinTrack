@@ -529,8 +529,13 @@ HOLDINGS () {
     amount=$(echo $amount | sed 's/\,/\./g');
     if [[ $amount == *"+"* ]] || [[ $amount == *"-"* ]]; then
         newAmount=$(awk "BEGIN {a="$currentAmount"; n="$amount"; an=a+n; printf an}");
+    elif [[ -z $amount ]]; then
+       TABLE
     else
-        newAmount="$amount"
+        echo "error...NO CHANGES SAVED!"
+        echo "try again..."
+        sleep 3s;
+        TABLE
     fi
 
     jsonFile=$(echo "$jsonFile" | jq --arg newHolding $newAmount --arg c "$selectedCoin" '.DATA.Coins.[$c] += {"Holding": $newHolding}')
