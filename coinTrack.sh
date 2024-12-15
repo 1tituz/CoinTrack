@@ -190,11 +190,13 @@ fi
 jsonFile=$(echo "$jsonFile" | jq --arg tvalue "$totalValue" '.DATA += {"Totalvalue": $tvalue}')
 echo $jsonFile | jq > db.json
 
+differenz=$(awk "BEGIN { print ($totalValue-$oldValue)/$oldValue*100 }")
+
 if [[ $portF == 0 ]]; then
     totalValue="****"
 fi
 
-differenz=$(awk "BEGIN { print ($totalValue-$oldValue)/$oldValue*100 }")
+
 
 
 echo -e "   Total Value: ${blue}$currency $totalValue ${reset}";
