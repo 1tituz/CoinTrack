@@ -186,9 +186,14 @@ if [[ $oldValue == null ]]; then
     oldValue=$totalValue
 fi
 
+
+
+LASTREFRESH
+
+
 # Write new totalValue
 jsonFile=$(echo "$jsonFile" | jq --arg tvalue "$totalValue" '.DATA += {"Totalvalue": $tvalue}')
-echo $jsonFile | jq > db.json
+
 
 differenz=$(awk "BEGIN { print ($totalValue-$oldValue)/$oldValue*100 }")
 
@@ -201,9 +206,9 @@ fi
 
 echo -e "   Total Value: ${blue}$currency $totalValue ${reset}";
 if [[ $differenz == -* ]]; then
-echo -e "      % Change: ${red}${bold}$differenz ${reset}";
+echo -e "   Value change since last refreshed ${bold}$lastRefresh${reset} ago: ${red}${bold}$differenz % ${reset}";
     else
-echo -e "      % Change: ${green}${bold}$differenz ${reset}";
+echo -e "   Value change since last refreshed ${bold}$lastRefresh${reset} ago: ${green}${bold}$differenz % ${reset}";
 fi
 
 
@@ -564,4 +569,44 @@ if [[ "$resp" == "Error" ]]; then
 fi
 echo;
 }
+
+LASTREFRESH () {
+# Get last refresh Date
+date2=$(echo $jsonFile | jq -r .DATA.lastValueRefresh)
+if [[ $date2 == null ]]; then
+    date=$(date +%s);
+fi
+# Create current Date
+date1=$(date +%s)
+
+# Get the difference
+diff_seconds=$(awk "BEGIN { t=$date1; l=$date2; tl=t-l; print tl}");
+
+# Calculate days, hours, minutes, and seconds
+days=$((diff_seconds / 86400))
+hours=$(( (diff_seconds % 86400) / 3600 ))
+minutes=$(( (diff_seconds % 3600) / 60 ))
+seconds=$((diff_seconds % 60))
+# Format nicely
+dz="$days Days"
+hz="$hours"h""
+mz="$minutes"min""
+sz="$seconds"sec""
+
+if [[ $minutes == 0 ]]; then
+    lastRefresh=$sz
+    elif [[ $hours == 0 ]]; then
+    lastRefresh="$mz $sz"
+    elif [[ $days == 0 ]]; then
+    lastRefresh="$hz $mz $sz"
+    else
+    lastRefresh="$dz $hz $mz $sz"
+fi
+
+# Write current refresh time
+lastValueRefresh=$(date +%s);
+jsonFile=$(echo "$jsonFile" | jq --arg trefresh "$lastValueRefresh" '.DATA += {"lastValueRefresh": $trefresh}')
+echo $jsonFile | jq > db.json
+}
+
 START
