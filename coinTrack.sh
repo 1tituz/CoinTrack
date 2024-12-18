@@ -206,12 +206,12 @@ fi
 
 echo -e "   Total Value: ${blue}$currency $totalValue ${reset}";
 if [[ $differenz == -* ]]; then
-echo -e "   Value change since last refreshed ${bold}$lastRefresh${reset} ago: ${red}${bold}$differenz % ${reset}";
+echo -e "   Change in the last ${bold}$lastRefresh${reset}: ${red}${bold}$differenz % ${reset}";
     else
-echo -e "   Value change since last refreshed ${bold}$lastRefresh${reset} ago: ${green}${bold}$differenz % ${reset}";
+echo -e "   Change in the last ${bold}$lastRefresh${reset}: ${green}${bold}$differenz % ${reset}";
 fi
 
-
+echo $jsonFile | jq > db.json
 echo;echo;echo;echo;
 MENU
 }
