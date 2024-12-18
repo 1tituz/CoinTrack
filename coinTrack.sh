@@ -100,28 +100,34 @@ totalValue=0;
 newValues=$(curl -g -s -X GET "https://min-api.cryptocompare.com/data/pricemultifull?fsyms="$coinsToTrack"&tsyms=$currency&api_key={$APIkey}" | jq)
 
 
-echo;
-echo -e "***  Coin  ******  Price ********* 1h% ** 24h%  ***   24h Volume   ***     Marketcap    ***  Holdings & Value in $currency ***";
-echo -e "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––";
-for (( i=0; i<$n; i++ ));  do
-
-# Get the Coinsymbols from db.json
+# SORT COINS AS PREFERED
 if [[ $sortTABLE == "a" ]]; then
     # Alphabetical Sort
-    coin=$(echo "$jsonFile" | jq -r ".DATA.Coins | keys.[$i]") # Symbol
+    coinn=$(echo "$jsonFile" | jq -r ".DATA.Coins | keys.[$i]") # Symbol
     elif [[ $sortTABLE == "p" ]]; then
     # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.FIATholding | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.FIATholding | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
     elif [[ $sortTABLE == "m" ]]; then
     # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.Marketcap | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.Marketcap | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
     elif [[ $sortTABLE == "1" ]]; then
     # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change1h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change1h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
     elif [[ $sortTABLE == "2" ]]; then
     # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
 fi
+
+
+echo;
+echo -e "***  Coin  ******  Price ********* 1h% ** 24h%  ***   24h Volume   ***     Marketcap    ***  Holdings & Value in $currency ***";
+echo -e "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––----";
+for (( i=0; i<$n; i++ ));  do
+
+# Add 1 to $i since awk starts counting at 1
+cn=$(($i+1));
+# Get Coinname from Variable
+coin=$(echo "$coinn" | awk "NR==$cn")
 
 
 rawPrice=$(echo "$newValues" | jq -r .RAW.$coin.$currency.PRICE) # Current RawPrice
