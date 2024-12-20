@@ -105,17 +105,17 @@ if [[ $sortTABLE == "a" ]]; then
     # Alphabetical Sort
     coinn=$(echo "$jsonFile" | jq -r ".DATA.Coins | keys.[$i]") # Symbol
     elif [[ $sortTABLE == "p" ]]; then
-    # Sort by Portfolio Value
+    # Sort by holings
     coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.FIATholding | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
     elif [[ $sortTABLE == "m" ]]; then
-    # Sort by Portfolio Value
+    # Sort by marketcap
     coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.Marketcap | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
     elif [[ $sortTABLE == "1" ]]; then
-    # Sort by Portfolio Value
+    # Sort by 1h change
     coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change1h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
     elif [[ $sortTABLE == "2" ]]; then
-    # Sort by Portfolio Value
-    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    # Sort by 24h change
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | from_entries' | jq -r "keys_unsorted[$i]");
 fi
 
 
@@ -229,28 +229,34 @@ LOGO
 #Count amount of CoinstoTrack
 n=$(echo "$jsonFile" | jq '.DATA.Coins | length')
 
+
+# SORT COINS AS PREFERED
+if [[ $sortTABLE == "a" ]]; then
+    # Alphabetical Sort
+    coinn=$(echo "$jsonFile" | jq -r ".DATA.Coins | keys.[$i]") # Symbol
+    elif [[ $sortTABLE == "p" ]]; then
+    # Sort by holings
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.FIATholding | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    elif [[ $sortTABLE == "m" ]]; then
+    # Sort by marketcap
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.Marketcap | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    elif [[ $sortTABLE == "1" ]]; then
+    # Sort by 1h change
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change1h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+    elif [[ $sortTABLE == "2" ]]; then
+    # Sort by 24h change
+    coinn=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
+fi
+
 echo;
 echo -e "*******  Coin  ******  Price ********* 1h% ** 24h% ** 3D% ** 7D% **  1M%  ** 3M%  **  6M%  **  9M%  **  1Y% ";
 echo -e "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––";
 for (( i=0; i<$n; i++ ));  do
 
-# Get the Coinsymbols from db.json
-if [[ $sortTABLE == "a" ]]; then
-    # Alphabetical Sort
-    coin=$(echo "$jsonFile" | jq -r ".DATA.Coins | keys.[$i]") # Symbol
-    elif [[ $sortTABLE == "p" ]]; then
-    # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.FIATholding | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
-    elif [[ $sortTABLE == "m" ]]; then
-    # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.Marketcap | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
-    elif [[ $sortTABLE == "1" ]]; then
-    # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change1h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
-    elif [[ $sortTABLE == "2" ]]; then
-    # Sort by Portfolio Value
-    coin=$(echo "$jsonFile" | jq '.DATA.Coins | to_entries | sort_by( .value.change24h | tonumber) | reverse | from_entries' | jq -r "keys_unsorted[$i]");
-fi
+# Add 1 to $i since awk starts counting at 1
+cn=$(($i+1));
+# Get Coinname from Variable
+coin=$(echo "$coinn" | awk "NR==$cn")
 
 
 rawPrice=$(echo "$newValues" | jq .RAW.$coin.$currency.PRICE | sed s/\"//g;) # Current RawPrice
