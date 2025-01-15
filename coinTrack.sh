@@ -181,10 +181,11 @@ echo;echo;
 # Calculate Total Value
 jsonFile=$(cat db.json | jq)
 valueList=$(echo "$jsonFile" | jq '.DATA.Coins.[] | .FIATholding' | sed 's/\"//g')
-    
+
 while IFS= read -r line; do
 totalValue=$(awk "BEGIN {t=$totalValue; l=$line; tl=t+l; print tl}");
 done <<< "$valueList"
+
 
 # Read totalValue
 oldValue=$(echo $jsonFile | jq -r .DATA.Totalvalue)
@@ -200,23 +201,23 @@ LASTREFRESH
 # Write new totalValue
 jsonFile=$(echo "$jsonFile" | jq --arg tvalue "$totalValue" '.DATA += {"Totalvalue": $tvalue}')
 
-
-differenz=$(awk "BEGIN { print ($totalValue-$oldValue)/$oldValue*100 }")
-
+if [[ $oldValue > "0" ]]; then
+    differenz=$(awk "BEGIN { print ($totalValue-$oldValue)/$oldValue*100 }")
+fi
 if [[ $portF == 0 ]]; then
     totalValue="****"
 fi
 
 
+if [[ $totalValue > "0" ]]; then
 
-
-echo -e "   Total Value: ${blue}$currency $totalValue ${reset}";
-if [[ $differenz == -* ]]; then
-echo -e "   Change in the last ${bold}$lastRefresh${reset}: ${red}${bold}$differenz % ${reset}";
-    else
-echo -e "   Change in the last ${bold}$lastRefresh${reset}: ${green}${bold}$differenz % ${reset}";
+    echo -e "   Total Value: ${blue}$currency $totalValue ${reset}";
+    if [[ $differenz == -* ]]; then
+    echo -e "   Change in the last ${bold}$lastRefresh${reset}: ${red}${bold}$differenz % ${reset}";
+        else
+    echo -e "   Change in the last ${bold}$lastRefresh${reset}: ${green}${bold}$differenz % ${reset}";
+    fi
 fi
-
 echo $jsonFile | jq > db.json
 echo;echo;echo;echo;
 MENU
@@ -551,10 +552,7 @@ HOLDINGS () {
     elif [[ -z $amount ]]; then
        TABLE
     else
-        echo "error...NO CHANGES SAVED!"
-        echo "try again..."
-        sleep 3s;
-        TABLE
+        newAmount=$amount
     fi
 
     jsonFile=$(echo "$jsonFile" | jq --arg newHolding $newAmount --arg c "$selectedCoin" '.DATA.Coins.[$c] += {"Holding": $newHolding}')
