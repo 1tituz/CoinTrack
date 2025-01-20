@@ -2,7 +2,7 @@
 ### Just a very simple Bash script to track your cryptocurrency Portfolio in the Linux Terminal.
 
 
-![coinTrack Screenshot]( https://raw.githubusercontent.com/1tituz/CoinTrack/main/Screenshot_TableView.png "Standard View")
+![coinTrack Screenshot]( https://raw.githubusercontent.com/1tituz/CoinTrack/main/coinTrackMain.png "Standard View")
 Standart View
 
 ![coinTrack Screenshot]( https://raw.githubusercontent.com/1tituz/CoinTrack/main/screenshot_coinTrack2.png "History View")
