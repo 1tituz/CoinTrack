@@ -8,41 +8,46 @@
     "Coins": {
       "BTC": {
         "Holding": "0.3",
-        "FIATholding": "28967.3",
-        "Marketcap": "1912855052346.4133",
-        "change24h": "0.62",
-        "change1h": "-0.17"
+        "FIATholding": "32571.3",
+        "Marketcap": "2151079269799.5403",
+        "change24h": "3.75",
+        "change1h": "0.53",
+        "lastRefreshedPrice": "108571.139351779"
       },
       "ETH": {
-        "Holding": 0,
-        "FIATholding": "0",
-        "Marketcap": "384589278541.663",
-        "change24h": "0.28",
-        "change1h": "-0.20"
+        "Holding": "0.5",
+        "FIATholding": "1691.19",
+        "Marketcap": "407582531427.9442",
+        "change24h": "6.73",
+        "change1h": "0.68",
+        "lastRefreshedPrice": "3382.37908039782"
       },
       "BNB": {
-        "Holding": 0,
-        "FIATholding": "0",
-        "Marketcap": "99374444378.56572",
-        "change24h": "-0.39",
-        "change1h": "-0.29"
+        "Holding": "1",
+        "FIATholding": "697.464",
+        "Marketcap": "100438762881.09491",
+        "change24h": "1.43",
+        "change1h": "0.17",
+        "lastRefreshedPrice": "697.4642351086723"
       },
       "SOL": {
-        "Holding": "0",
-        "FIATholding": "0",
-        "Marketcap": "110366524402.89653",
-        "change24h": "0.19",
-        "change1h": "-0.32"
+        "Holding": "22",
+        "FIATholding": "5846.27",
+        "Marketcap": "157436370085.90118",
+        "change24h": "-6.41",
+        "change1h": "1.22",
+        "lastRefreshedPrice": "265.739484690699"
       },
       "DOGE": {
-        "Holding": 0,
-        "FIATholding": "0",
-        "Marketcap": "51582023020.700554",
-        "change24h": "0.79",
-        "change1h": "-0.69"
+        "Holding": "33",
+        "FIATholding": "12.5445",
+        "Marketcap": "56146183797.95251",
+        "change24h": "2.79",
+        "change1h": "0.80",
+        "lastRefreshedPrice": "0.380136508899443"
       }
     },
-    "lastValueRefresh": "1736943551",
-    "Totalvalue": "28967.3"
+    "lastValueRefresh": "1737368699",
+    "Totalvalue": "40818.8"
   }
 }

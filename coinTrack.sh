@@ -10,6 +10,9 @@ grey="\e[0;31m" # ${grey}
 violet="\e[0;36" # ${violet}
 bold="\e[1m" # ${bold}
 reset="\e[0m" # ${reset}
+# Background
+greyBG="\033[41m"
+resetBG="\033[0m"
 
 
 
@@ -100,6 +103,7 @@ totalValue=0;
 newValues=$(curl -g -s -X GET "https://min-api.cryptocompare.com/data/pricemultifull?fsyms="$coinsToTrack"&tsyms=$currency&api_key={$APIkey}" | jq)
 
 
+
 # SORT COINS AS PREFERED
 if [[ $sortTABLE == "a" ]]; then
     # Alphabetical Sort
@@ -120,8 +124,8 @@ fi
 
 
 echo;
-echo -e "***  Coin  ******  Price ********* 1h% ** 24h%  ***   24h Volume   ***     Marketcap    ***  Holdings & Value in $currency ***";
-echo -e "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––----";
+echo -e "***  Coin  ******  Price ******** last RF **   1h% ** 24h%  ***   24h Volume    ***     Marketcap    ***  Holdings & Value in $currency ***";
+echo -e "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––";
 for (( i=0; i<$n; i++ ));  do
 
 # Add 1 to $i since awk starts counting at 1
@@ -129,7 +133,7 @@ cn=$(($i+1));
 # Get Coinname from Variable
 coin=$(echo "$coinn" | awk "NR==$cn")
 
-
+LRprice=$(echo "$jsonFile" | jq -r .DATA.Coins.$coin.lastRefreshedPrice) # RawPrice from last Refresh
 rawPrice=$(echo "$newValues" | jq -r .RAW.$coin.$currency.PRICE) # Current RawPrice
 price=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.PRICE) # Current Price
 change=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGE24HOUR) # 24h pricechange $currency
@@ -139,11 +143,17 @@ changePctHour=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCTHOUR
 marketCapDsp=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.MKTCAP) # Marketcap
 totalVolume=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.TOTALVOLUME24HTO) # Total Volume last 24h
 
-
+# If LRdifference is null use current Price
+if [[ $LRprice == null ]]; then LRprice=$rawPrice; fi
+# Difference calculator from refreshed price to current price.
+LRdifference=$(awk "BEGIN { print ($rawPrice-$LRprice)/$LRprice*100 }")
+# Runden auf 2 Stellen
+LRdifference=$(echo $LRdifference | awk '{printf "%.2f\n", $1}')
 
 if [[ $changePct == -* ]]; then changePct=${red}$changePct${reset}; else changePct=${green}+$changePct${reset}; fi
 if [[ $changePctHour == -* ]]; then changePctHour=${red}$changePctHour${reset}; else changePctHour=${green}+$changePctHour${reset}; fi
 if [[ $change == -* ]]; then change=${red}$change${reset}; else change=${green}$change${reset}; fi
+if [[ $LRdifference == -* ]]; then LRdifference=${red}$LRdifference${reset}; else LRdifference=${green}+$LRdifference${reset}; fi
 
 
 # Calculate FIAT value of Holdings
@@ -159,6 +169,8 @@ change24=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCT24HOUR) #
 jsonFile=$(echo "$jsonFile" | jq --arg change $change24 --arg c "$coin" '.DATA.Coins.[$c] += {"change24h": $change}');
 change1=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCTHOUR) # 1h pricechange in %
 jsonFile=$(echo "$jsonFile" | jq --arg change $change1 --arg c "$coin" '.DATA.Coins.[$c] += {"change1h": $change}');
+# Save last Refresh Value of coin
+jsonFile=$(echo "$jsonFile" | jq --arg lastPrice $rawPrice --arg c "$coin" '.DATA.Coins.[$c] += {"lastRefreshedPrice": $lastPrice}');
 # Write new json Data to db.json only once
 if [[ $i == $(($n-1)) ]]; then
 echo "$jsonFile" | jq > db.json
@@ -172,7 +184,7 @@ if [[ $value == 0 ]]; then
     holding=" ";
     value=" ";
 fi
-echo -e "... ${bold}${white}$coin${reset} ... $price ... $changePctHour $changePct  ... $totalVolume ... $marketCapDsp ... $holding     =     ${blue}$value${reset}"; 
+echo -e "... ${bold}${white}$coin${reset} ... $price ... $LRdifference .. $changePctHour $changePct  ... $totalVolume ... $marketCapDsp ... $holding     =     ${blue}$value${reset}"; 
 
 done | column -t;
 echo;echo;
