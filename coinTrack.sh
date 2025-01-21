@@ -521,9 +521,16 @@ ADDCOIN () {
     read cadd
     cadd=${cadd^^}
     if [[ -z $cadd ]]; then
-        TABLE
+        echo;
+        echo -e "   ${blue}${bold}Error...Please a Coin Symbol!${reset}"
+        echo;echo;
+        ADDCOIN
+       # TABLE
         else
         CHECKSYMBOL
+        echo;
+        echo -e "   ${green}${bold}$cadd ${reset}${white}successfully added!${reset}"
+        sleep 2s
     fi 
 TABLE
 }
