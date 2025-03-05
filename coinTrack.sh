@@ -16,46 +16,90 @@ resetBG="\033[0m"
 
 
 
-START () {
-jsonFile=$(cat db.json | jq)
-    if [[ -z $jsonFile ]]; then
-        jsonFile=$(jq --null-input '{"DATA": {"apiKey": 0, "Currency": "USD", "Portfolio": "1", "sortTable": "a", "Lable": "on", "Coins": {"BTC": {"Holding": 0, "FIATholding": 0, "Marketcap": 0}, "ETH": {"Holding": 0, "FIATholding": 0, "Marketcap": 0}, "BNB": {"Holding": 0, "FIATholding": 0, "Marketcap": 0}, "SOL": {"Holding": 0, "FIATholding": 0}, "DOGE": {"Holding": 0, "FIATholding": 0, "Marketcap": 0},}}}');
-        echo $jsonFile | jq > db.json
-        INSTALL
+
+
+DEPENDENCIES() {
+    clear
+    echo;echo;
+# HIER DIE NOTWENDIGEN PROGRAMME EINGEBEN
+    dependencies=("curl" "jq" "sed" "awk" "cut")
+    missing_deps=()
+
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing_deps+=("$dep")
+        fi
+    done
+
+    if [ ${#missing_deps[@]} -eq 0 ]; then
+        dependMessage=$(echo -e "${green}All Dependencies found!${reset}")
+        
+    else
+        echo;
+        echo -e "${red}${bold}###################"
+        echo -e "COINTRACK ... error"
+        echo -e "###################"
+        echo;
+        echo;
+        echo -e "Following Apps are missing:${reset}${white}"
+        for dep in "${missing_deps[@]}"; do
+            echo "- $dep"
+        done
+        echo;
+        echo -e "${red}${bold}Please install these to run Cointrack!${reset}"
+        echo;echo;
+        exit 1
     fi
-TABLE
 }
 
 INSTALL () {
+DEPENDENCIES
 clear
 echo;echo;
-echo -e "       WELCOME TO"
+echo -e "       ${bold}WELCOME TO${reset}"
 echo -e "                   _    _______             _     "
 echo -e "                  (_)  |__   __|           | |   "
 echo -e "          ___ ___  _ _ __ | |_ __ __ _  ___| | __"
 echo -e "         / __/ _ \| |  _ \| |  __/ _  |/ __| |/ / "
 echo -e "        | (_| (_) | | | | | | | | (_| | (__|   < "
 echo -e "         \___\___/|_|_| |_|_|_|  \____|\___|_|\_\."
+echo;echo;echo;
 echo;
-echo;
-echo -e "       You need to get a (free) API Key from https://min-api.cryptocompare.com/ in order for coinTrack to work."
-echo -e "       Please enter your API Key from Cryptocompare:"
-echo -n "       : "
-read APIkey
+echo -e "       You might need to get a (free) API Key from https://min-api.cryptocompare.com/ in order for coinTrack to work."
+echo -e "       But it seems to work without it at the moment, let me check..."
 
-jsonFile=$(cat db.json | jq)
-jsonFile=$(echo "$jsonFile" | jq --arg apiKey "$APIkey" '.DATA += {"apiKey": $apiKey}')
-echo "$jsonFile" | jq > db.json
+checkAPI=$(curl -g -s -X GET "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD" | jq)
+checkResult=$(echo "$checkAPI" | jq -r '.Response');
+
+if [[ $checkResult == "Error" ]]; then
+
+    echo;
+    echo -e "       Key seems necessary :/"
+    echo -e "       Please enter your API Key from Cryptocompare:"
+    echo -n "       : "
+    read APIkey
+
+    jsonFile=$(cat db.json | jq)
+    jsonFile=$(echo "$jsonFile" | jq --arg apiKey "$APIkey" '.DATA += {"apiKey": $apiKey}')
+    echo "$jsonFile" | jq > db.json
+
+    else
+    echo;
+    echo -e "       ${green}\u2714${reset} All Good! No key necessary :)"
+    echo
+fi
+
 echo;
-APITEST
 echo;echo;
-echo -e "       Just hit ${white}${bold}[enter]${reset} to fetch the current Prices."
-echo -e "       For Information about all Commands just enter ${white}${bold}[i]${reset}."
-echo;
+echo -e "       Hit ${white}${bold}[enter]${reset} to fetch the current Prices."
+echo -e "       For Info about all available Commands enter ${white}${bold}[i]${reset} at the Menu."
+echo;echo;
+echo -e "       ${green}${bold}ENJOY!${reset}"
+echo;echo;
 echo -n "       [enter] to start."
 read enter
 
-LOGO
+TABLE
 }
 
 
@@ -582,22 +626,7 @@ HOLDINGS () {
 
     TABLE
 }
-APITEST () {
-echo -e "       Testing API Key"
-testKey=$(curl -g -s -X GET "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC&tsyms=USD&api_key={$APIkey}"| jq)
-resp="$(echo $testKey | grep -o "Error")" 
-if [[ "$resp" == "Error" ]]; then
-    echo;
-    echo -e "${red}${bold}"
-    echo -e "       API Error! Either wrong API Key or API just not working :(${reset}"
-    echo -n "       Let's try again...press [enter]"
-    read enter
-    INSTALL
-    else
-    echo -e "       ${green}${bold}All good!${reset}"
-fi
-echo;
-}
+
 
 LASTREFRESH () {
 # Get last refresh Date
@@ -638,4 +667,13 @@ jsonFile=$(echo "$jsonFile" | jq --arg trefresh "$lastValueRefresh" '.DATA += {"
 echo $jsonFile | jq > db.json
 }
 
+START () {
+    if [[ ! -f db.json ]]; then
+        jsonFile=$(jq --null-input '{"DATA": {"apiKey": 0, "Currency": "USD", "Portfolio": "1", "sortTable": "a", "Lable": "on", "Coins": {"BTC": {"Holding": 0, "FIATholding": 0, "Marketcap": 0}, "ETH": {"Holding": 0, "FIATholding": 0, "Marketcap": 0}, "BNB": {"Holding": 0, "FIATholding": 0, "Marketcap": 0}, "SOL": {"Holding": 0, "FIATholding": 0}, "DOGE": {"Holding": 0, "FIATholding": 0, "Marketcap": 0},}}}');
+        echo $jsonFile | jq > db.json
+        INSTALL
+        else
+        TABLE
+    fi
+}
 START

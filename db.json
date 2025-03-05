@@ -1,85 +1,53 @@
 {
   "DATA": {
-    "apiKey": "",
+    "apiKey": 0,
     "Currency": "USD",
     "Portfolio": "1",
     "sortTable": "a",
     "Lable": "on",
     "Coins": {
       "BTC": {
-        "Holding": "0.3",
-        "FIATholding": "30867.3",
-        "Marketcap": "2038588457015.5176",
-        "change24h": "-4.58",
-        "change1h": "0.29",
-        "lastRefreshedPrice": "102890.938672672"
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "1780611901830.7566",
+        "change24h": "7.00",
+        "change1h": "-0.16",
+        "lastRefreshedPrice": "89782.4694033089"
       },
       "ETH": {
-        "Holding": "0.5",
-        "FIATholding": "1646.07",
-        "Marketcap": "396705290498.6838",
-        "change24h": "-1.73",
-        "change1h": "0.59",
-        "lastRefreshedPrice": "3292.14123283449"
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "268753605614.7248",
+        "change24h": "6.10",
+        "change1h": "-0.43",
+        "lastRefreshedPrice": "2228.61012929286"
       },
       "BNB": {
-        "Holding": "1",
-        "FIATholding": "685.322",
-        "Marketcap": "98690218224.95038",
-        "change24h": "-1.38",
-        "change1h": "0.35",
-        "lastRefreshedPrice": "685.3224143917379"
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "85866995417.67244",
+        "change24h": "5.52",
+        "change1h": "0.01",
+        "lastRefreshedPrice": "602.6781172975622"
       },
       "SOL": {
-        "Holding": "22",
-        "FIATholding": "5262.35",
-        "Marketcap": "141741100248.42218",
-        "change24h": "-7.52",
-        "change1h": "0.49",
-        "lastRefreshedPrice": "239.197883028194"
+        "Holding": 0,
+        "FIATholding": "0",
+        "Marketcap": "88087184624.88531",
+        "change24h": "8.03",
+        "change1h": "-0.41",
+        "lastRefreshedPrice": "147.937185925612"
       },
       "DOGE": {
-        "Holding": "33",
-        "FIATholding": "11.3855",
-        "Marketcap": "50963392321.480225",
-        "change24h": "-8.78",
-        "change1h": "0.45",
-        "lastRefreshedPrice": "0.345014530597248"
-      },
-      "USDT": {
-        "Holding": "0",
+        "Holding": 0,
         "FIATholding": "0",
-        "Marketcap": "143610470781.66028",
-        "change24h": "0.01",
-        "change1h": "0.00",
-        "lastRefreshedPrice": "0.998932282601008"
-      },
-      "KMD": {
-        "Holding": "0",
-        "FIATholding": "0",
-        "Marketcap": "37350764.69411567",
-        "change24h": "-2.06",
-        "change1h": "2.87",
-        "lastRefreshedPrice": "0.2655382988026884"
-      },
-      "ADA": {
-        "Holding": "0",
-        "FIATholding": "0",
-        "Marketcap": "44333605347.18034",
-        "change24h": "-8.41",
-        "change1h": "1.61",
-        "lastRefreshedPrice": "0.985191229937341"
-      },
-      "TON": {
-        "Holding": "0",
-        "FIATholding": "0",
-        "Marketcap": "25536348163.193447",
-        "change24h": "-1.74",
-        "change1h": "0.49",
-        "lastRefreshedPrice": "4.987240828455494"
+        "Marketcap": "30259433795.827168",
+        "change24h": "5.57",
+        "change1h": "-0.36",
+        "lastRefreshedPrice": "0.204040911801427"
       }
     },
-    "lastValueRefresh": "1737456093",
-    "Totalvalue": "38472.4"
+    "lastValueRefresh": "1741172602",
+    "Totalvalue": "0"
   }
 }
