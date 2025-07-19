@@ -185,6 +185,10 @@ changePct=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCT24HOUR) 
 changeHour=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEHOUR) # 1h pricechange in USD
 changePctHour=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.CHANGEPCTHOUR) # 1h pricechange in $currency
 marketCapDsp=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.MKTCAP) # Marketcap
+# In case marketcap is not an integer
+if [[ "$marketCapDsp" == *e* ]]; then
+    marketCapDsp=$(echo "no integer :(")
+fi
 totalVolume=$(echo "$newValues" | jq -r .DISPLAY.$coin.$currency.TOTALVOLUME24HTO) # Total Volume last 24h
 
 # If LRdifference is null use current Price

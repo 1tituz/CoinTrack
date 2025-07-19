@@ -9,45 +9,53 @@
       "BTC": {
         "Holding": 0,
         "FIATholding": "0",
-        "Marketcap": "1780611901830.7566",
-        "change24h": "7.00",
-        "change1h": "-0.16",
-        "lastRefreshedPrice": "89782.4694033089"
+        "Marketcap": "2353197205666.142",
+        "change24h": "-0.86",
+        "change1h": "-0.04",
+        "lastRefreshedPrice": "118284.96081573"
       },
       "ETH": {
         "Holding": 0,
         "FIATholding": "0",
-        "Marketcap": "268753605614.7248",
-        "change24h": "6.10",
-        "change1h": "-0.43",
-        "lastRefreshedPrice": "2228.61012929286"
+        "Marketcap": "429240446882.7713",
+        "change24h": "-1.77",
+        "change1h": "-0.13",
+        "lastRefreshedPrice": "3555.90283142711"
       },
       "BNB": {
         "Holding": 0,
         "FIATholding": "0",
-        "Marketcap": "85866995417.67244",
-        "change24h": "5.52",
-        "change1h": "0.01",
-        "lastRefreshedPrice": "602.6781172975622"
+        "Marketcap": "101971328359.57306",
+        "change24h": "-1.03",
+        "change1h": "-0.14",
+        "lastRefreshedPrice": "732.0844344035443"
       },
       "SOL": {
         "Holding": 0,
         "FIATholding": "0",
-        "Marketcap": "88087184624.88531",
-        "change24h": "8.03",
-        "change1h": "-0.41",
-        "lastRefreshedPrice": "147.937185925612"
+        "Marketcap": "107093776117.17462",
+        "change24h": "-1.49",
+        "change1h": "0.02",
+        "lastRefreshedPrice": "176.836613411461"
       },
       "DOGE": {
         "Holding": 0,
         "FIATholding": "0",
-        "Marketcap": "30259433795.827168",
-        "change24h": "5.57",
-        "change1h": "-0.36",
-        "lastRefreshedPrice": "0.204040911801427"
+        "Marketcap": "37941614225.22131",
+        "change24h": "4.61",
+        "change1h": "-0.21",
+        "lastRefreshedPrice": "0.252682120104505"
+      },
+      "ZIL": {
+        "Holding": "0",
+        "FIATholding": "0",
+        "Marketcap": "2.7023422344607635E-10",
+        "change24h": "-4.21",
+        "change1h": "-0.07",
+        "lastRefreshedPrice": "0.01288722111924202"
       }
     },
-    "lastValueRefresh": "1741172602",
+    "lastValueRefresh": "1752919753",
     "Totalvalue": "0"
   }
 }
