@@ -1,3 +1,5 @@
+# API changed and closed by Coindesk! App not functioning for the time being.
+
 # coinTrack
 ### Just a very simple Bash script to track your cryptocurrency Portfolio in the Linux Terminal.
 
